@@ -1,0 +1,6 @@
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\bin\Debug\BZTreewidth.exe.config
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\obj\Debug\BZTreewidth.csprojResolveAssemblyReference.cache
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\bin\Debug\BZTreewidth.exe
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\bin\Debug\BZTreewidth.pdb
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\obj\Debug\BZTreewidth.exe
+C:\Users\3713784\Dropbox\Werk UU\TWChallenge\BZTreewidth\BZTreewidth\obj\Debug\BZTreewidth.pdb
