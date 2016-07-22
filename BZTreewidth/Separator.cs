@@ -72,8 +72,8 @@ namespace BZTreewidth
                             if (newSeparator.Count + 1 == bestSeparatorSize)
                                 return RemoveSeparator(bestSeparator);
 
-#if !LIMIT_SEPARATOR
-                            if(Program.TotalExpanded > 40000000) return null; // Apparently finding a separator in this graph is really hard, don't know how to solve, just fall back to DFS/DP and hope for the best
+#if LIMIT_SEPARATOR
+                            if(Program.TotalExpanded > 30000000) return null; // Apparently finding a separator in this graph is really hard, don't know how to solve, just fall back to DFS/DP and hope for the best
 #endif
                         }
                     }

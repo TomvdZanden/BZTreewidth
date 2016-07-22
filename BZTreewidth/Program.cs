@@ -26,61 +26,26 @@ namespace BZTreewidth
                 random = new Random(4321);
             }
 
-            //HandleFile("other/inithx.i.2.dgf");
-            //HandleFile("other/1c9o_graph.dimacs");
-            //HandleFile("../../instances/other/myciel5.gr");
-            //HandleFile("medium/DesarguesGraph.gr");
-            //HandleFile("other/david.dgf");
-            //HandleFile("other/myciel4.dgf");
-            //HandleFile("other/queen5_5.dgf");
-            //HandleFile("other/queen6_6.gr");
-            //HandleFile("random/RKT_20_40_10_1.gr");
-            //HandleFile("hard/contiki_dhcpc_handle_dhcp.gr");
-            //HandleFile("hard/McGeeGraph.gr");
-            //HandleFile("../../instances/hard/DoubleStarSnark.gr");
-            //HandleFile("grids/grid-0025-5-5.gr");
-            //HandleFile("grids/grid-0036-6-6.gr");
-            //return;
-            //Console.ReadLine();
-
-            //HandleFile(args[0]);
-
-            // Run all of the testcases
-            foreach (string dir in new string[] { "easy", "medium", "hard", "random" })
-            //foreach (string dir in new string[] { "easy", "medium" })
-            //foreach (string dir in new string[] { "random-grids" })
-            //foreach (string dir in new string[] { "tw-heuristic\\easy" })
-            //foreach (string dir in new string[] { "hicks" })
-            //foreach (string dir in new string[] { "hard" })
-            //foreach (string dir in new string[] { "queen" })
-            {
-                foreach (string f in Directory.EnumerateFiles("../../instances/" + dir))
-                    HandleFile(f);
-            }
-
-            Console.ReadLine();
+            HandleCase();
         }
 
-        static void HandleFile(string file)
+        static void HandleCase()
         {
-            Console.Title = file;
-
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            if (!file.EndsWith(".gr") && !file.EndsWith(".dgf") && !file.EndsWith(".dimacs") && !file.EndsWith(".col")) return; // Only process input (and not output) files
+            //if (!file.EndsWith(".gr") && !file.EndsWith(".dgf") && !file.EndsWith(".dimacs") && !file.EndsWith(".col")) return; // Only process input (and not output) files
 
             // Parse the input graph
             Graph g = new Graph();
-            foreach (string line in File.ReadAllLines(file))
+            for (string line = Console.ReadLine(); line != null; line = Console.ReadLine() )
             {
                 if (line.StartsWith("c") || line.StartsWith("n")) continue; // Comment or dimacs node
 
                 if (line.StartsWith("p")) // Initialization
                 {
                     string[] cf = line.Split(' ');
-                    Console.Write(file + ";v;" + cf[2] + ";e;" + cf[3] + ";");
-
+                    
                     for (int i = 0; i < int.Parse(cf[2]); i++)
                         g.AddVertex(i);
 
@@ -143,7 +108,7 @@ namespace BZTreewidth
             }
 
             timer.Stop();
-            Console.Write("tw\t" + treewidth + "\texp\t" + TotalExpanded + "\ttime\t" + Math.Round(timer.ElapsedMilliseconds / 1000d, 2));
+            //Console.Write("tw\t" + treewidth + "\texp\t" + TotalExpanded + "\ttime\t" + Math.Round(timer.ElapsedMilliseconds / 1000d, 2));
         }
     }
 
