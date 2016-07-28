@@ -75,7 +75,7 @@ namespace BZTreewidth
 
             if (g.vertices.Count == 0)
             {
-                Console.WriteLine("empty");
+                Console.WriteLine("s td 0 0 0");
                 return;
             }
 
