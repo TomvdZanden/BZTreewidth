@@ -18,33 +18,34 @@ all:
 	
 .SUFFIXES: .gr .test
 	
-testfiles_med = $(wildcard ./BZTreewidth/instances/medium/*.gr)
-med_run = $(testfiles_med:.gr=.test)
+testfiles = $(wildcard ./BZTreewidth/instances/alltests/*.gr)
+test_run = $(testfiles:.gr=.test)
 	
-test: $(med_run)
+test: $(test_run)
+		cat tmp/validation.txt
 	
 .gr.test:
 	./bin/BZTreewidth-DP.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DP-LS.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/PARALLEL-BZTreewidth-DP.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/PARALLEL-BZTreewidth-DP-LS.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-LS.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV-ASV-EADD-MMW.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV-ASV-MMW.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV-ASV-MMWLIMIT.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV-MMW.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
 	./bin/BZTreewidth-DFS-SV-MMWLIMIT.exe < $< > tmp/tmp.td
-	./tmp/td-validate $< tmp/tmp.td
+	./tmp/td-validate $< tmp/tmp.td 2>> tmp/validation.txt
