@@ -24,6 +24,8 @@ namespace BZTreewidth
             int lower = Program.BagsList.Count > 0 ? Program.BagsList.Max((b) => b.Count) : 0;
 
             // Enumerate all possible separators; we don't need to consider separators that are as large as the entire graph
+			// This doesn't necessarily generate minimal separators (it may generate some non-minimal ones as well) the treewidth is quite often close to the minimal separator size so this doesn't matter too much
+			// The approach taken here is quite simple and could be improved upon
             for (int i = 2; i < bestSeparatorSize - 1; i++)
             {
                 List<List<Vertex>> newSeparators = new List<List<Vertex>>();
@@ -40,7 +42,7 @@ namespace BZTreewidth
                         foreach (Vertex u in newSeparator)
                             tempVertices.Remove(u);
 
-                        // Consider the possible articulation points that can extend this set to a minimal separator
+                        // Consider the possible articulation points that can extend this set to a separator
                         IEnumerable<Vertex> aps = new Graph(tempVertices).ArticulationPoints();
                         if (!aps.Any())
                             newSeparators.Add(newSeparator);
@@ -48,6 +50,8 @@ namespace BZTreewidth
                         // Try each one as a possible separator
                         foreach (Vertex ap in aps)
                         {
+							if(ap.Label <= separator[separator.Count - 1].Label) continue; // This one will be generated some other way as well
+						
                             newSeparator.Add(ap);
                             int oldBagCount = Program.BagsList.Count;
 
