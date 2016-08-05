@@ -112,6 +112,9 @@ namespace BZTreewidth
                     }
                 }           
 #else
+                // Attempt to get parallelism working on the test system
+                System.Threading.ThreadPool.SetMaxThreads(48 * 5, 48 * 5);
+                System.Threading.ThreadPool.SetMinThreads(8, 8);
                 Parallel.ForEach(table, () => new List<ulong>(), (S, loopState, partialResult) =>
                 {
                     if (islast && (newTable.Count > 0 || partialResult.Count > 0)) return partialResult;

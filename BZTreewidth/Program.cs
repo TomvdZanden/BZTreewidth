@@ -12,6 +12,7 @@ namespace BZTreewidth
     {
         public static List<List<Vertex>> BagsList; // Global variabele that stores the bags used in the decomposition
         public static int TotalExpanded;
+        public static int SeparatorTried;
         public static Random random;
 
         static void Main(string[] args)
@@ -26,15 +27,58 @@ namespace BZTreewidth
                 random = new Random(4321);
             }
 
+            //QuickTest();
+
             HandleCase();
+        }
+
+        static void QuickTest()
+        {
+            HandleFile("../../instances/heur-random/RandomGNM_100_100.gr");
+
+            foreach (string dir in new string[] { "medium", "hard" })
+            {
+                foreach (string f in Directory.EnumerateFiles("../../instances/" + dir))
+                    HandleFile(f);
+            }
+        }
+
+        static void HandleFile(string f)
+        {
+            if (!f.EndsWith(".gr") && !f.EndsWith(".dgf") && !f.EndsWith(".dimacs") && !f.EndsWith(".col")) return; // Only process input (and not output) files
+
+            string name = Path.GetFileNameWithoutExtension(f).Substring(0, Math.Min(Path.GetFileNameWithoutExtension(f).Length, 29));
+            Console.Write(name + new String(' ', 30 - name.Length));
+
+            TextReader oldIn = Console.In;
+            TextWriter oldOut = Console.Out;
+
+            StreamReader fileReader = new StreamReader(f);
+            Console.SetIn(fileReader);
+
+            MemoryStream outStream = new MemoryStream();
+            StreamWriter outStreamWriter = new StreamWriter(outStream);
+            Console.SetOut(outStreamWriter);
+
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            HandleCase();
+            sw.Stop();
+
+            Console.SetOut(oldOut);
+            Console.SetIn(oldIn);
+
+            fileReader.Close();
+            outStreamWriter.Close();
+            outStream.Close();
+
+            Console.WriteLine(" tw={0}\texp={1} sep={2} {3}s", BagsList.Max((b) => b.Count), TotalExpanded + new String(' ', 8 - TotalExpanded.ToString().Length), SeparatorTried + new String(' ', 8 - SeparatorTried.ToString().Length), Math.Round(sw.ElapsedMilliseconds / 1000.0, 1));
         }
 
         static void HandleCase()
         {
             Stopwatch timer = new Stopwatch();
             timer.Start();
-
-            //if (!file.EndsWith(".gr") && !file.EndsWith(".dgf") && !file.EndsWith(".dimacs") && !file.EndsWith(".col")) return; // Only process input (and not output) files
 
             // Parse the input graph
             Graph g = new Graph();
@@ -82,13 +126,14 @@ namespace BZTreewidth
             // Run the algorithm
             BagsList = new List<List<Vertex>>();
             TotalExpanded = 0;
+            SeparatorTried = 0;
 
             Graph TD = g.Decompose();
             int treewidth = BagsList.Max((b) => b.Count);
 
             // Write the output decomposition
             Console.Write("s td {0} {1} {2}", TD.vertices.Count, treewidth, g.vertices.Count); //s-line
-
+            
             // Output bag contents
             int bc = 1;
             foreach (Vertex v in TD.vertices.Keys)
