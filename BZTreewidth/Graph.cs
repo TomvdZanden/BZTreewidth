@@ -146,6 +146,49 @@ namespace BZTreewidth
             yield break;
         }
 
+        // Enumerates the articulation points of the graph, and also returns any vertices in a component of a given exact size
+        public IEnumerable<Vertex> ArticulationPointsOrComponentSize(int targetSize)
+        {
+            int treecount;
+
+            foreach (Vertex v in vertices.Keys)
+            {
+                if (v.cv) yield return v;
+
+                if (v.depth == 0)
+                {
+                    treecount = 0;
+                    foreach (Edge e in v.Edges)
+                        if (e.oe(v).depth == 1)
+                            treecount++;
+                    if (treecount > 1)
+                        yield return v;
+                }
+                if (v.depth > -1) continue;
+
+                int oldCompCount = component.Count;
+
+                v.depth = 0;
+                LabelDFS(v);
+
+                if (component.Count - oldCompCount == targetSize)
+                {
+                    for (int i = oldCompCount; i < component.Count; i++)
+                        component[i].cv = true;
+                    yield return v;
+                }
+
+                treecount = 0;
+                foreach (Edge e in v.Edges)
+                    if (e.oe(v).depth == 1)
+                        treecount++;
+                if (treecount > 1)
+                    yield return v;
+            }
+
+            yield break;
+        }
+
         // Subroutine (DFS) used for articulation points and connected components (Tarjan/Hopcroft)
         public int LabelDFS(Vertex v)
         {

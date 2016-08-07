@@ -124,7 +124,7 @@ namespace BZTreewidth
         public Graph ComputeTD()
         {
             // Graph is too big and not dense enough. Try the separator technique
-            if (vertices.Count >= 25 && edges.Count < 5 * vertices.Count)
+            if (vertices.Count >= 23 && edges.Count < 5 * vertices.Count)
             {
                 Graph result = BranchOnSeparator();
                 if (result != null)

@@ -26,8 +26,8 @@ namespace BZTreewidth
             // We enumerate over all vertex subsets of increasing size, and check whether they form a balanced separator (n choose k options)
             // If so, we branch on removing this separator
             // We consider all subsets of size k-1, and extend it to a subset of size k by adding an articulation point
-            // Adding a non-articulation point to a separator can basically not make it balanced, except if it was off by only 1 vertex
-            // As such we get a slightly weaker balance guarantee (+1) but can consider a factor of n less subsets
+            // This reduces the number of points we have to consider (in the last step) greatly
+            // One caveat: if a component was off by 1 from the upper, limit, we have to consider all possibilities for this component
             for (int i = 2; i < bestSeparatorSize - 1; i++)
             {
                 List<List<Vertex>> newSeparators = new List<List<Vertex>>();
@@ -46,21 +46,22 @@ namespace BZTreewidth
                             tempVertices.Remove(u);
 
                         // Consider the possible articulation points that can extend this set to a separator
-                        IEnumerable<Vertex> aps = new Graph(tempVertices).ArticulationPoints();
-                        
+                        // OR vertices of components that are just marginally too large
+                        IEnumerable<Vertex> aps = new Graph(tempVertices).ArticulationPointsOrComponentSize((vertices.Count - newSeparator.Count + 2) / 2);
+
                         // Try each one as a possible separator
                         foreach (Vertex ap in aps)
                         {
-							if(ap.Label <= separator[separator.Count - 1].Label) continue; // This one will be generated some other way as well
+                            if (ap.Label <= separator[separator.Count - 1].Label) continue; // This one will be generated some other way as well
 
                             Program.SeparatorTried++;
-						
+
                             newSeparator.Add(ap);
                             int oldBagCount = Program.BagsList.Count;
 
                             // There is (guaranteed) a balanced separator (biggest component at most (n-k+1)/2 vertices)
                             // We have to round this number up because of the adj-trick
-                            Graph candidateDecomposition = RemoveSeparator(newSeparator, (vertices.Count - newSeparator.Count + 2) / 2);
+                            Graph candidateDecomposition = RemoveSeparator(newSeparator, (vertices.Count - newSeparator.Count + 1) / 2);
                             if (candidateDecomposition != null)
                             {
                                 int candidateWidth = Program.BagsList.Max((b) => b.Count);
