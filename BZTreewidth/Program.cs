@@ -27,7 +27,7 @@ namespace BZTreewidth
                 random = new Random(4321);
             }
 
-            QuickTest();
+            //QuickTest();
 
             HandleCase();
         }
